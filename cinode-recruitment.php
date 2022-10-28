@@ -368,8 +368,6 @@ function cinode_recruitment_apiTokenCheck()
 function cinode_recruitment_send_mail($email)
 {
 	$to = $email;
-	// $subject = 'Welcome To cinode.com';
-	// $body = 'Thanks for applying for this possition.';
 	$headers = array('Content-Type: text/html; charset=UTF-8');
 	$cinode_recruitment_options_sendmail = get_option('cinode_recruitment_options_sendmail');
 	$subject = $cinode_recruitment_options_sendmail['option_subject'];
@@ -420,7 +418,7 @@ function cinode_recruitment_settings_page()
 {
 	?>
 	<div class="wrap">
-		<h2>Cinode Recruitment Plugin Options</h2>
+		<h2>Cinode Recruitment Plugin Settings</h2>
 
 		<form method="post" action="options.php">
 			<?php settings_fields('cinode_recruitment-settings-group');
