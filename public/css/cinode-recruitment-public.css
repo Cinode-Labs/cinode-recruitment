@@ -44,6 +44,11 @@ textarea {
 
 #submit {width: 100%;}
 
+#submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .block, .header.header-icon {
     margin-bottom: 5px;
 }

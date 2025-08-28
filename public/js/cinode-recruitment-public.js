@@ -36,6 +36,10 @@ jQuery(document).ready(function ($) {
     event.preventDefault();
     var currentForm = $(this);
 
+    // Disable submit button to prevent double submissions
+    var submitButton = currentForm.find("#submit");
+    submitButton.prop("disabled", true);
+    
     currentForm.find(".spinner").show();
     const email = currentForm.find("#email-input");
     const first_name = currentForm.find("#first_name-input");
@@ -106,10 +110,14 @@ jQuery(document).ready(function ($) {
         submitRequest(formData, currentForm);
       } else {
         currentForm.find(".spinner").hide();
+        // Re-enable submit button if validation fails
+        currentForm.find("#submit").prop("disabled", false);
       }
     } else {
       currentForm.find("#terms-validate").show();
       currentForm.find(".spinner").hide();
+      // Re-enable submit button if terms not accepted
+      currentForm.find("#submit").prop("disabled", false);
     }
 
     function validateRequiredInputs() {
@@ -168,19 +176,35 @@ jQuery(document).ready(function ($) {
             currentForm.find("input:checkbox").removeAttr("checked");
             currentForm.find(":input").not(":button, :submit, :reset, :hidden").val("");
             currentForm.find("#file-name").text("");
+            // Re-enable submit button after successful submission
+            currentForm.find("#submit").prop("disabled", false);
           } else if (response.response.code == 401) {
             currentForm.find("#unsuccessful-submit-msg").show(300);
             setTimeout(function () {
               currentForm.find("#unsuccessful-submit-msg").fadeOut("fast");
             }, 6000);
             currentForm.find(".spinner").hide();
+            // Re-enable submit button after error
+            currentForm.find("#submit").prop("disabled", false);
           }else{
             currentForm.find("#unsuccessful-submit-msg").show(300);
             setTimeout(function () {
               currentForm.find("#unsuccessful-submit-msg").fadeOut("fast");
             }, 6000);
             currentForm.find(".spinner").hide();
+            // Re-enable submit button after error
+            currentForm.find("#submit").prop("disabled", false);
           }
+        },
+        error: function (xhr, status, error) {
+          // Handle AJAX errors (network issues, server errors, etc.)
+          currentForm.find(".spinner").hide();
+          currentForm.find("#unsuccessful-submit-msg").show(300);
+          setTimeout(function () {
+            currentForm.find("#unsuccessful-submit-msg").fadeOut("fast");
+          }, 6000);
+          // Re-enable submit button after error
+          currentForm.find("#submit").prop("disabled", false);
         },
       });
     }
