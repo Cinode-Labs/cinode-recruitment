@@ -36,6 +36,14 @@ jQuery(document).ready(function ($) {
     event.preventDefault();
     var currentForm = $(this);
 
+    // Prevent double submission
+    if (currentForm.data('isSubmitting')) {
+      return;
+    }
+    
+    // Mark form as submitting
+    currentForm.data('isSubmitting', true);
+
     currentForm.find(".spinner").show();
     const email = currentForm.find("#email-input");
     const first_name = currentForm.find("#first_name-input");
@@ -105,9 +113,13 @@ jQuery(document).ready(function ($) {
 
         submitRequest(formData, currentForm);
       } else {
+        // Clear submission flag on validation failure
+        currentForm.data('isSubmitting', false);
         currentForm.find(".spinner").hide();
       }
     } else {
+      // Clear submission flag when terms not accepted
+      currentForm.data('isSubmitting', false);
       currentForm.find("#terms-validate").show();
       currentForm.find(".spinner").hide();
     }
@@ -159,6 +171,9 @@ jQuery(document).ready(function ($) {
         contentType: false,
         processData: false,
         success: function (response) {
+          // Clear submission flag on completion
+          currentForm.data('isSubmitting', false);
+          
           if (response.response.code == 201) {
             currentForm.find(".spinner").hide();
             currentForm.find("#successful-submit-msg").show(300);
@@ -182,6 +197,15 @@ jQuery(document).ready(function ($) {
             currentForm.find(".spinner").hide();
           }
         },
+        error: function () {
+          // Clear submission flag on error
+          currentForm.data('isSubmitting', false);
+          currentForm.find(".spinner").hide();
+          currentForm.find("#unsuccessful-submit-msg").show(300);
+          setTimeout(function () {
+            currentForm.find("#unsuccessful-submit-msg").fadeOut("fast");
+          }, 6000);
+        }
       });
     }
   });
