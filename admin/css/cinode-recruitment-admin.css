@@ -1,4 +1,340 @@
 /**
- * All of the CSS for your admin-specific functionality should be
- * included in this file.
+ * Cinode Recruitment — Admin Styles
  */
+
+/* ============================================================
+   Page wrapper
+   ============================================================ */
+.cinode-wrap {
+	max-width: 1200px;
+}
+
+/* ============================================================
+   Page header: title + connection badge
+   ============================================================ */
+.cinode-page-header {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin: 20px 0 0;
+}
+
+.cinode-page-title {
+	display: flex !important;
+	align-items: center;
+	gap: 8px;
+	font-size: 1.5rem !important;
+	font-weight: 600 !important;
+	color: #1d2327 !important;
+	margin: 0 !important;
+	line-height: 1.3 !important;
+}
+
+.cinode-page-title .dashicons {
+	font-size: 1.6rem;
+	width: 1.6rem;
+	height: 1.6rem;
+	color: #2271b1;
+}
+
+/* ============================================================
+   Connection status badge
+   ============================================================ */
+.cinode-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 4px 14px;
+	border-radius: 20px;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	line-height: 1.5;
+	white-space: nowrap;
+}
+
+.cinode-badge .dashicons {
+	font-size: 1rem;
+	width: 1rem;
+	height: 1rem;
+}
+
+.cinode-badge--active {
+	background: #d8f5e2;
+	color: #1a6b34;
+	border: 1px solid #9de0b7;
+}
+
+.cinode-badge--inactive {
+	background: #fce8e8;
+	color: #7a1919;
+	border: 1px solid #f5a0a0;
+}
+
+/* ============================================================
+   Tab navigation
+   ============================================================ */
+.cinode-nav-tabs {
+	display: flex;
+	align-items: flex-end;
+	gap: 6px;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	scrollbar-width: thin;
+	margin-top: 16px;
+	border-bottom: 1px solid #c3c4c7;
+}
+
+.cinode-nav-tabs::-webkit-scrollbar {
+	height: 6px;
+}
+
+.cinode-nav-tabs::-webkit-scrollbar-thumb {
+	background: #c3c4c7;
+	border-radius: 3px;
+}
+
+.cinode-nav-tabs::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.cinode-nav-tabs .nav-tab {
+	float: none !important;
+	flex: 0 0 auto;
+	display: inline-flex !important;
+	align-items: center;
+	gap: 5px;
+	margin: 0 0 -1px 0 !important;
+	padding: 8px 12px !important;
+	font-size: 0.875rem;
+	cursor: pointer;
+	border-bottom: none;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.cinode-nav-tabs .nav-tab:focus {
+	outline: 2px solid #2271b1;
+	outline-offset: -2px;
+	box-shadow: none;
+}
+
+.cinode-nav-tabs .nav-tab .dashicons {
+	font-size: 1rem;
+	width: 1rem;
+	height: 1rem;
+	margin: 0;
+}
+
+.cinode-nav-tabs .nav-tab-active {
+	background: #f0f0f1;
+	border-bottom: 1px solid #f0f0f1;
+	margin-bottom: -1px;
+}
+
+/* ============================================================
+   Cards (extend WordPress .postbox)
+   ============================================================ */
+.cinode-card {
+	margin-top: 20px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.cinode-card > .postbox-header {
+	background: #f6f7f7;
+	border-bottom: 1px solid #c3c4c7;
+	border-radius: 4px 4px 0 0;
+	padding: 0 14px;
+	min-height: 48px;
+	display: flex;
+	align-items: center;
+}
+
+.cinode-card > .postbox-header .hndle {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	color: #1d2327;
+	padding: 0;
+	margin: 0;
+	cursor: default;
+	border: none;
+	pointer-events: none; /* prevent WP default toggle */
+}
+
+.cinode-card > .postbox-header .hndle .dashicons {
+	color: #2271b1;
+	font-size: 1.1rem;
+	width: 1.1rem;
+	height: 1.1rem;
+}
+
+.cinode-card > .inside {
+	padding: 18px 20px 22px;
+}
+
+.cinode-card > .inside > p:first-child {
+	margin-top: 0;
+	color: #50575e;
+}
+
+/* ============================================================
+   Form table improvements
+   ============================================================ */
+.cinode-card .form-table th {
+	width: 220px;
+	padding-top: 20px;
+	padding-left: 0;
+	vertical-align: top;
+}
+
+.cinode-card .form-table td {
+	vertical-align: top;
+}
+
+.cinode-card .form-table input[type="text"],
+.cinode-card .form-table input[type="password"],
+.cinode-card .form-table input[type="number"],
+.cinode-card .form-table select,
+.cinode-card .form-table textarea {
+	border-radius: 4px;
+}
+
+.cinode-card .form-table .description {
+	margin-top: 6px;
+	color: #646970;
+	font-size: 0.8125rem;
+}
+
+.cinode-card .submit {
+	padding-top: 10px;
+	padding-left: 0;
+}
+
+/* ============================================================
+   Code / shortcode blocks
+   ============================================================ */
+.cinode-code-block {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	background: #f0f2f4;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 12px 14px;
+}
+
+.cinode-code-block code {
+	flex: 1;
+	font-size: 0.8125rem;
+	line-height: 1.7;
+	word-break: break-all;
+	background: none;
+	padding: 0;
+	color: #1d2327;
+}
+
+.cinode-copy-btn {
+	flex-shrink: 0;
+	display: inline-flex !important;
+	align-items: center;
+	gap: 5px;
+	white-space: nowrap;
+}
+
+.cinode-copy-btn .dashicons {
+	font-size: 1rem;
+	width: 1rem;
+	height: 1rem;
+}
+
+/* ============================================================
+   Shortcode reference tables
+   ============================================================ */
+.cinode-ref-table {
+	border-radius: 4px;
+	overflow: hidden;
+	border: 1px solid #c3c4c7 !important;
+}
+
+.cinode-ref-table thead th {
+	background: #f6f7f7 !important;
+	font-size: 0.8125rem !important;
+	font-weight: 600 !important;
+	color: #1d2327 !important;
+	padding: 10px 14px !important;
+	border-bottom: 1px solid #c3c4c7;
+}
+
+.cinode-ref-table tbody td {
+	font-size: 0.8125rem !important;
+	padding: 9px 14px !important;
+	vertical-align: top;
+}
+
+.cinode-ref-table code {
+	background: #f0f2f4;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 0.8rem;
+	white-space: nowrap;
+	color: #1d2327;
+}
+
+/* ============================================================
+   Inline notices
+   ============================================================ */
+.cinode-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 10px 14px;
+	border-radius: 4px;
+	margin: 16px 0 0;
+	font-size: 0.875rem;
+	line-height: 1.5;
+}
+
+.cinode-notice .dashicons {
+	flex-shrink: 0;
+	font-size: 1.1rem;
+	width: 1.1rem;
+	height: 1.1rem;
+	margin-top: 2px;
+}
+
+.cinode-notice--info {
+	background: #e7f5ff;
+	border: 1px solid #b8dafe;
+	color: #0c4a6e;
+}
+
+.cinode-notice--info a {
+	color: #0c6fcd;
+}
+
+/* ============================================================
+   Spam protection step list
+   ============================================================ */
+.cinode-step-list {
+	list-style: decimal;
+	margin: 0;
+	padding-left: 1.5em;
+}
+
+.cinode-step-list li {
+	margin-bottom: 10px;
+	line-height: 1.6;
+	color: #1d2327;
+}
+
+.cinode-step-list a {
+	text-decoration: none;
+}
+
+.cinode-step-list a:hover {
+	text-decoration: underline;
+}
