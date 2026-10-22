@@ -220,7 +220,7 @@ function cinode_recruitment_settings_page()
 
 			<tr valign="top">
 				<th scope="row">Message body</th>
-				<td><input type="text" name="cinode_recruitment_options_sendmail[option_message]" style="width:50%;" value="<?php echo $cinode_recruitment_options_sendmail['option_message'] ?>" /></td>
+				<td><input type="text" name="cinode_recruitment_options_sendmail[option_message]" style="width:50%;" value="<?php echo esc_attr($cinode_recruitment_options_sendmail['option_message']); ?>" /></td>
 			</tr>
 
 		</table>
@@ -233,7 +233,12 @@ function cinode_recruitment_settings_page()
 
 	<h2>Spam protection with Google Recaptcha</h2>
 	
-	<p>If you want to protect from spam, Register your Recaptca keys on <a href="https://www.google.com/recaptcha/admin/create" target="_blank">Google Recaptcha</a>. Install plugin <a href="https://wordpress.org/plugins/advanced-nocaptcha-recaptcha/">CAPTCHA 4WP</a> and set your Site Key and Secret.</p>
+	<p>If you want to protect from spam, Register your Recaptca keys on <a href="https://www.google.com/recaptcha/admin/create" target="_blank">Google Recaptcha</a>. Install plugin <a href="https://wordpress.org/plugins/advanced-nocaptcha-recaptcha/">CAPTCHA 4WP</a> (version 7.6 or later) and set your Site Key and Secret.</p>
+	<?php if (cinode_recruitment_captcha_enabled()) : ?>
+		<p><span style="color:green; font-weight:bold;">CAPTCHA is active and verified on the server for every application.</span></p>
+	<?php else : ?>
+		<p><span style="color:#b26200; font-weight:bold;">CAPTCHA is not active. Applications are only protected by rate limiting.</span></p>
+	<?php endif; ?>
 
 	
 </div>
