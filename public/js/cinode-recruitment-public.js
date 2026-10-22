@@ -45,10 +45,8 @@ jQuery(document).ready(function ($) {
     const linkedInUrl = currentForm.find("#LinkedInUrl");
     const companyAddressSelect = currentForm.find("#companyAddressId option:selected");
     const multiplePipeline = currentForm.find("#selectedPipelineId option:selected").val();
-    const multipleStageId = currentForm.find("#selectedPipelineId option:selected").attr(
-      "stageId"
-    );
-    const file = currentForm.find("input.file-upload")[0].files[0];
+    const fileInput = currentForm.find("input.file-upload");
+    const file = fileInput[0].files[0];
     const terms = currentForm.find("#terms");
     const availableFrom = currentForm.find("#availableFrom");
 
@@ -57,51 +55,29 @@ jQuery(document).ready(function ($) {
       currentForm.find("#terms-validate").hide();
       var errorMessages = validateRequiredInputs();
       if (errorMessages.length === 0) {
-        formData.append("files", file);
+        if (file) {
+          formData.append("files", file);
+        }
         formData.append("firstName", first_name.val());
         formData.append("lastName", last_name.val());
         formData.append("email", email.val());
         formData.append("phone", phone.val());
         formData.append("description", description.val());
         formData.append("linkedInUrl", linkedInUrl.val());
-        formData.append("state", 0);
-        formData.append("currencyId", currencyId);
+        formData.append("formConfig", currentForm.find("form").attr("data-cinode-config") || "");
+        formData.append("captchaResponse", captchaResponse());
 
-        if (pipelineId) {
-          formData.append("pipelineId", pipelineId);
-        } else if (multiplePipeline) {
-          formData.append("pipelineId", multiplePipeline);
+        if (multiplePipeline) {
+          formData.append("selectedPipelineId", multiplePipeline);
         }
 
-        if (pipelineStageId) {
-          formData.append("pipelineStageId", pipelineStageId);
-        } else if (multipleStageId) {
-          formData.append("pipelineStageId", multipleStageId);
-        }
-
-        if (recruitmentManagerId) {
-          formData.append("recruitmentManagerId", recruitmentManagerId);
-        }
-        if (teamId) {
-          formData.append("teamId", teamId);
-        }
-        if (companyAddressId) {
-          formData.append("companyAddressId", companyAddressId);
-        } else if (companyAddressSelect.length == 1) {
+        if (companyAddressSelect.length == 1) {
           formData.append("companyAddressId", companyAddressSelect.val());
-        } else {
-          formData.append("companyAddressId", "");
         }
 
         if (availableFrom.length > 0) {
           formData.append("availableFrom", availableFrom.val());
         }
-
-        if (recruitmentSourceId) {
-          formData.append("recruitmentSourceId", recruitmentSourceId);
-        }
-        formData.append("campaignCode", campaignCode);
-
 
         submitRequest(formData, currentForm);
       } else {
@@ -110,6 +86,28 @@ jQuery(document).ready(function ($) {
     } else {
       currentForm.find("#terms-validate").show();
       currentForm.find(".spinner").hide();
+    }
+
+    function captchaResponse() {
+      var token = "";
+      currentForm
+        .find('[name="g-recaptcha-response"], [name="h-captcha-response"], [name="cf-turnstile-response"]')
+        .each(function () {
+          if (!token && $(this).val()) {
+            token = $(this).val();
+          }
+        });
+      return token;
+    }
+
+    function fileIsValid() {
+      if (!file) {
+        return true;
+      }
+      var allowed = (fileInput.attr("accept") || "").toLowerCase().split(",");
+      var extension = "." + file.name.split(".").pop().toLowerCase();
+      var maxSize = parseInt(fileInput.attr("data-max-size"), 10) || 0;
+      return allowed.indexOf(extension) !== -1 && (!maxSize || file.size <= maxSize);
     }
 
     function validateRequiredInputs() {
@@ -144,7 +142,33 @@ jQuery(document).ready(function ($) {
         currentForm.find("#last_name-required").hide();
       }
 
+      if (fileIsValid()) {
+        currentForm.find("#file-invalid").hide();
+      } else {
+        errorMessage.push("Invalid file");
+        currentForm.find("#file-invalid").show();
+      }
+
       return errorMessage;
+    }
+
+    function resetCaptcha() {
+      try {
+        if (window.grecaptcha && typeof window.grecaptcha.reset === "function") {
+          window.grecaptcha.reset();
+        }
+      } catch (e) {
+        // Invisible/v3 captchas have no widget to reset.
+      }
+    }
+
+    function showError() {
+      currentForm.find("#unsuccessful-submit-msg").show(300);
+      setTimeout(function () {
+        currentForm.find("#unsuccessful-submit-msg").fadeOut("fast");
+      }, 6000);
+      currentForm.find(".spinner").hide();
+      resetCaptcha();
     }
 
     function submitRequest(data, currentForm) {
@@ -158,8 +182,8 @@ jQuery(document).ready(function ($) {
         data: data,
         contentType: false,
         processData: false,
-        success: function (response) {
-          if (response.response.code == 201) {
+        success: function (response, status, xhr) {
+          if (xhr.status === 201 && response && response.success) {
             currentForm.find(".spinner").hide();
             currentForm.find("#successful-submit-msg").show(300);
             setTimeout(function () {
@@ -167,20 +191,14 @@ jQuery(document).ready(function ($) {
             }, 5000);
             currentForm.find("input:checkbox").removeAttr("checked");
             currentForm.find(":input").not(":button, :submit, :reset, :hidden").val("");
-            currentForm.find("#file-name").text("");
-          } else if (response.response.code == 401) {
-            currentForm.find("#unsuccessful-submit-msg").show(300);
-            setTimeout(function () {
-              currentForm.find("#unsuccessful-submit-msg").fadeOut("fast");
-            }, 6000);
-            currentForm.find(".spinner").hide();
-          }else{
-            currentForm.find("#unsuccessful-submit-msg").show(300);
-            setTimeout(function () {
-              currentForm.find("#unsuccessful-submit-msg").fadeOut("fast");
-            }, 6000);
-            currentForm.find(".spinner").hide();
+            currentForm.find(".file-name").text("");
+            resetCaptcha();
+          } else {
+            showError();
           }
+        },
+        error: function () {
+          showError();
         },
       });
     }
